@@ -5283,6 +5283,21 @@ class TestMaskedArrayFunctions:
         test = np.ma.compress(cond, marr, axis=0)
         assert_equal(test, control)
 
+    def test_compress_keywords(self):
+        # ma.compress accepts its advertised keyword names
+        marr = np.ma.array([1, 2, 3, 4], mask=[0, 1, 0, 0])
+        cond = [True, True, False, True]
+        control = np.ma.array([1, 2, 4], mask=[0, 1, 0])
+        for test in (np.ma.compress(cond, marr), np.ma.compress(cond, a=marr),
+                     np.ma.compress(condition=cond, a=marr)):
+            assert_equal(test, control)
+            assert_mask_equal(test.mask, control.mask)
+        marr2d = np.ma.array([[1, 2], [3, 4]], mask=[[0, 1], [1, 0]])
+        test = np.ma.compress(condition=[True, False], a=marr2d, axis=0)
+        control = np.ma.array([[1, 2]], mask=[[0, 1]])
+        assert_equal(test, control)
+        assert_mask_equal(test.mask, control.mask)
+
     def test_compressed(self):
         # Test ma.compressed function.
         # Address gh-4026

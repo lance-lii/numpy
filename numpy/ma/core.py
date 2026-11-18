@@ -7191,8 +7191,8 @@ def _frommethod(methodname: str, reversed: bool = False):
         assert len(params) >= 2
         params[0], params[1] = params[1], params[0]
 
-        def wrapper(a, b, *args, **params):
-            return getattr(asanyarray(b), methodname)(a, *args, **params)
+        def wrapper(condition, a, *args, **params):
+            return getattr(asanyarray(a), methodname)(condition, *args, **params)
 
     else:
         def wrapper(a, *args, **params):
